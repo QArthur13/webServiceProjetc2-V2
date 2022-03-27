@@ -5,3 +5,13 @@ controllers:
 kernel:
     resource: ../src/Kernel.php
     type: annotation
+
+#route pour tester login et get token   
+api_login_check:
+    path: /api/login_check
+    controller: App\Controller\ApiTokenController::getTokenUser 
+
+#route pour tester refresh token
+gesdinet_jwt_refresh_token:
+    path:       /api/token/refresh
+    controller: gesdinet.jwtrefreshtoken::refresh

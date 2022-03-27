@@ -84,7 +84,7 @@ class ApiAccountController extends AbstractController
         $mime = $this->getFormats($request->headers->get('Accept', 'application/json'));
         $user = $accountRepository->find($id);
 
-        if (!($user->getId() === $this->getUser()->getId())) {
+        if (!($user->getId() === $this->getUser())) {
 
             //L'admin peut lui modifier ce qu'il veut, par contre
             if ($this->isGranted('ROLE_ADMIN')) {
@@ -142,7 +142,7 @@ class ApiAccountController extends AbstractController
         $entityManager = $managerRegistry->getManager();
 
         //On test pour savoir s'il s'agit du même Id pour afficher
-        if (!($user->getId() === $this->getUser()->getId())) {
+        if (!($user->getId() === $this->getUser())) {
 
             //L'admin peut lui modifier ce qu'il veut, par contre
             if ($this->isGranted('ROLE_ADMIN')) {

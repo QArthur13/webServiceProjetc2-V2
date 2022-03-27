@@ -1,0 +1,4 @@
+gesdinet_jwt_refresh_token:
+    ttl: 7200 # in seconds, default is 3600*2, = 2 heures
+    ttl_update: true
+    user_identity_field: email

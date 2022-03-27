@@ -15,7 +15,7 @@ class ApiDefaultController extends AbstractController
     {
         if ('application/xml' === $request->headers->get('Accept')) {
 
-            $formats = 'xlm';
+            $formats = 'xml';
             $contentType = 'application/xml';
 
         } else {

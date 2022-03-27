@@ -6,26 +6,28 @@ use App\Repository\AccountRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
 class Account implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    private $uid;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private $email;
+    private ?string $email;
 
     #[ORM\Column(type: 'json')]
-    private $roles = [];
+    private array $roles = [];
 
     #[ORM\Column(type: 'string')]
-    private $password;
+    private string $password;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $status;
+    private ?string $status;
 
     #[ORM\Column(type: 'datetime')]
     private $createdAt;
@@ -33,9 +35,9 @@ class Account implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'datetime')]
     private $updatedAt;
 
-    public function getId(): ?int
+    public function getId(): ?Uuid
     {
-        return $this->id;
+        return $this->uid;
     }
 
     public function getEmail(): ?string

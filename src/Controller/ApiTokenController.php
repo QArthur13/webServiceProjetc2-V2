@@ -52,7 +52,8 @@ class ApiTokenController extends AbstractController
 
             $serializer->serialize([
 
-                "user" => $account->getUserIdentifier(),
+                //"user" => $account->getUserIdentifier(),
+                "user" => $account,
                 "token" => $token
 
             ], $formats),

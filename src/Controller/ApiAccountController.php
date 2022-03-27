@@ -105,14 +105,14 @@ class ApiAccountController extends AbstractController
      * @param SerializerInterface $serializer
      * @return Response
      */
-    #[Route('api/account/{id}', name: 'api_one_user', methods: ["GET"])]
-    public function show(Request $request, AccountRepository $accountRepository, int $id, SerializerInterface $serializer): Response
+    #[Route('api/account/{uid}', name: 'api_one_user', methods: ["GET"])]
+    public function show(Request $request, AccountRepository $accountRepository, string $uid, SerializerInterface $serializer): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $mime = $this->getFormats($request->headers->get('Accept', 'application/json'));
         //On récupère un utilisateur
-        $user = $accountRepository->find($id);
+        $user = $accountRepository->find($uid);
 
         //S'il n'y a pas d'utilisateur alors on renvoie une erreur
         if (empty($user)) {
@@ -178,14 +178,14 @@ class ApiAccountController extends AbstractController
      * @param SerializerInterface $serializer
      * @return Response
      */
-    #[Route('api/account/{id}', name: 'api_update_user', methods: ["PUT"])]
-    public function edit(Request $request, ManagerRegistry $managerRegistry, AccountRepository $accountRepository, int $id, SerializerInterface $serializer): Response
+    #[Route('api/account/{uid}', name: 'api_update_user', methods: ["PUT"])]
+    public function edit(Request $request, ManagerRegistry $managerRegistry, AccountRepository $accountRepository, string $uid, SerializerInterface $serializer): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $mime = $this->getFormats($request->headers->get('Accept'));
         $entityManager = $managerRegistry->getManager();
-        $user = $accountRepository->find($id);
+        $user = $accountRepository->find($uid);
 
         //Le quatrième paramètre permet de mettre à jour l'utilisateur actuel
         $requestData = $serializer->deserialize($request->getContent(), Account::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $user]);

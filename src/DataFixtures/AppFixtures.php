@@ -25,7 +25,7 @@ class AppFixtures extends Fixture
             $account = new Account();
             $password = $this->passwordHasher->hashPassword($account, "account".$i);
            
-            $account->setEmail("account" . $i . "@authws.com");
+            $account->setEmail("account" . $i . "@youpi.com");
             $account->setPassword($password);
          // les 5 premiers ont le roles admin
             if ($i <= 5) {

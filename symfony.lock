@@ -95,6 +95,12 @@
     "laminas/laminas-code": {
         "version": "4.5.1"
     },
+    "lcobucci/clock": {
+        "version": "2.1.0"
+    },
+    "lcobucci/jwt": {
+        "version": "4.0.4"
+    },
     "nikic/php-parser": {
         "version": "v4.13.2"
     },

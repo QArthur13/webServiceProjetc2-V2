@@ -20,25 +20,18 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         // $faker= Faker\Factory:: create('fr_FR');
-        
-        for($i=1; $i<50;$i++){
-            $account = new Account();
-            $password = $this->passwordHasher->hashPassword($account, "account".$i);
-           
-            $account->setEmail("account" . $i . "@youpi.com");
-            $account->setPassword($password);
-         // les 5 premiers ont le roles admin
-            if ($i <= 5) {
-                $account->setRoles(['ROLE_ADMIN']);
-            }else {
-                $account->setRoles(['ROLE_USER']);
-            }
-            $account->setStatus("open");
-            $account->setCreatedAt(new \DateTime());
-            $account->setUpdatedAt(new \DateTime());
-            $manager->persist($account);
-        }
-       
+
+        $account = new Account();
+        $account
+            ->setEmail('arthur@youpi.fr')
+            ->setPassword($this->passwordHasher->hashPassword($account, 'Fr84!'))
+            ->setRoles(['ROLE_ADMIN'])
+            ->setStatus("open")
+            ->setCreatedAt(new \DateTime())
+            ->setUpdatedAt(new \DateTime())
+        ;
+
+        $manager->persist($account);
         $manager->flush();
     }
 }

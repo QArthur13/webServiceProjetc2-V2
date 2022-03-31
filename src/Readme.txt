@@ -55,3 +55,7 @@ Revoke a token
 If you want to revoke a single token you can use this command:
 
 php bin/console gesdinet:jwt:revoke TOKEN
+
+
+création de limite de login
+composer require symfony/rate-limiter

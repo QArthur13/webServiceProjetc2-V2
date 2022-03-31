@@ -23,6 +23,7 @@ class AppFixtures extends Fixture
         
         for($i=1; $i<50;$i++){
             $account = new Account();
+            
             $password = $this->passwordHasher->hashPassword($account, "account".$i);
            
             $account->setEmail("account" . $i . "@youpi.com");

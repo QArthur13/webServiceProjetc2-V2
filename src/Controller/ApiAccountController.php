@@ -39,14 +39,15 @@ class ApiAccountController extends AbstractController
     public function index(Request $request, AccountRepository $accountRepository, SerializerInterface $serializer): Response
     {
         //On vérifie si la personne est authentifié et possède le droit admin
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Seuls les personnes avec le role "admin" peuvent accéder à cette information!');
+        // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Seuls les personnes avec le role "admin" peuvent accéder à cette information!');
 
         /**
          * @var AccountRepository $users
          * Récupère tous les utilisateurs
          */
         $users = $accountRepository->findAll();
+       
         //On récupère le format choisi
         $mime = $this->getFormats($request->headers->get('Accept'));
 
@@ -71,7 +72,8 @@ class ApiAccountController extends AbstractController
     {
         //On vérifie si la personne est authentifier et possède le droit admin
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Seuls les personnes avec le role "admin" peuvent accéder à cette information!');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Seuls les personnes avec le role "admin" 
+        peuvent accéder à cette information!');
 
         $mime = $this->getFormats($request->headers->get('Accept'));
         $entityManager = $managerRegistry->getManager();
@@ -108,7 +110,7 @@ class ApiAccountController extends AbstractController
     #[Route('api/account/{uid}', name: 'api_one_user', methods: ["GET"])]
     public function show(Request $request, AccountRepository $accountRepository, string $uid, SerializerInterface $serializer): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+    //    $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $mime = $this->getFormats($request->headers->get('Accept', 'application/json'));
         //On récupère un utilisateur
@@ -128,7 +130,7 @@ class ApiAccountController extends AbstractController
         }
 
         //Si l'id n'est pas le même que celui de l'utilisateur connecter, alors on regarde s'il s'agit de l'admin
-        if (!($user->getId() === $this->getUser()->getId())) {
+        if (!($user->getId()->toBinary() === $this->getUser())) {
 
             //L'admin peut lui modifier ce qu'il veut, par contre
             if ($this->isGranted('ROLE_ADMIN')) {
@@ -194,7 +196,7 @@ class ApiAccountController extends AbstractController
         $requestData->setUpdatedAt(new \DateTime());
 
         //Voir plus haut pour l'explication du test
-        if (!($user->getId() === $this->getUser()->getId())) {
+        if (!($user->getId() === $this->getUser())) {
 
             //L'admin peut lui modifier ce qu'il veut, par contre
             if ($this->isGranted('ROLE_ADMIN')) {
@@ -220,9 +222,7 @@ class ApiAccountController extends AbstractController
                 $serializer->serialize($user, $mime),
                 Response::HTTP_OK,
                 ["Content-Type" => ("xml" === $mime ? "application/xml" : "application/json")]
-
             );
-
         }
 
         return new Response(

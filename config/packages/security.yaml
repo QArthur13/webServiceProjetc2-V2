@@ -1,3 +1,16 @@
+# framework:
+#     rate_limiter:
+#         # define 2 rate limiters (one for username+IP, the other for IP)
+#         username_ip_login:
+#             policy: token_bucket
+#             limit: 3
+#             rate: { interval: '1 minutes' }
+
+#         ip_login:
+#             policy: sliding_window
+#             limit: 50
+#             interval: '15 minutes'
+            
 security:
     enable_authenticator_manager: true
     password_hashers:
@@ -12,15 +25,24 @@ security:
         login:
             pattern: ^/api/login
             stateless: true
+            login_throttling:
+                max_attempts: 5
+                interval: '15 minutes'
             json_login:
                 check_path: /api/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
+        # configure the maximum login attempts in a custom period of time
+        # login_throttling:
+        #     max_attempts: 2
+        #     interval: '15 minutes'
+  
         api:
             pattern:   ^/api
             stateless: true
             jwt: ~
+            
 
         api_token_refresh:
             pattern: ^/api/token/refresh

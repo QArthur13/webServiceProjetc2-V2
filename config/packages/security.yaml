@@ -24,6 +24,9 @@ security:
                 check_path: app_api_token
             logout:
                 path: app_api_logout
+            login_throttling:
+                max_attempts: 3
+                interval: '30 minutes'
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

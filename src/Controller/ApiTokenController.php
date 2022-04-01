@@ -22,7 +22,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\Serializer\Serializer;
 
 class ApiTokenController extends AbstractController

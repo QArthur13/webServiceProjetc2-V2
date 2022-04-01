@@ -97,7 +97,9 @@ class ApiTokenController extends AbstractController
                 'accessToken' => $token->toString(),
                 'accessTokenExpiresAt' => $token->claims()->get('exp'),
                 'refreshToken' => $refreshToken->toString(),
-                'refreshTokenExpiresAt' => $refreshToken->claims()->get('exp')
+                'refreshTokenExpiresAt' => $refreshToken->claims()->get('exp'),
+                'User information' => $account->getUserIdentifier(),
+                'User UID' => $account->getId()
 
             ], $formats),
             Response::HTTP_CREATED,
@@ -153,7 +155,7 @@ class ApiTokenController extends AbstractController
 
             return new Response(
 
-                $serializer->serialize(['message' => "Token Inconnu!"], $formats),
+                $serializer->serialize(['message' => "Token Invalide ou Token changer!"], $formats),
                 Response::HTTP_NOT_FOUND,
                 ['Content-Type' => $contentType]
 
@@ -250,7 +252,7 @@ class ApiTokenController extends AbstractController
 
         $newToken = $configuration
             ->builder()
-            ->issuedBy('http://localhost:8000/api/refresh-token/'.$token[0]->getRefreshToken().'/token')
+            ->issuedBy('http://localhost:8000/api/refresh-token/your-refresh-token/token')
             ->permittedFor($account->getUserIdentifier())
             ->issuedAt($newDate)
             ->expiresAt($newDate->modify('+1 hour'))
@@ -258,7 +260,7 @@ class ApiTokenController extends AbstractController
         ;
         $newRefreshToken = $configuration
             ->builder()
-            ->issuedBy('http://localhost:8000/api/refresh-token/'.$token[0]->getRefreshToken().'/token')
+            ->issuedBy('http://localhost:8000/api/refresh-token/your-refresh-token/token')
             ->permittedFor($account->getUserIdentifier())
             ->issuedAt($newDate)
             ->expiresAt($newDate->modify('+2 hour'))
@@ -271,6 +273,7 @@ class ApiTokenController extends AbstractController
             ->setRefreshToken($newRefreshToken->toString())
             ->setRefreshTokenExpiresAt($newRefreshToken->claims()->get('exp'))
         ;
+
         $entityManager->flush();
 
         return new Response(
@@ -280,7 +283,8 @@ class ApiTokenController extends AbstractController
                 'accessToken' => $newToken->toString(),
                 'accessTokenExpiresAt' => $newToken->claims()->get('exp'),
                 'refreshToken' => $newRefreshToken->toString(),
-                'refreshTokenExpiresAt' => $newRefreshToken->claims()->get('exp')
+                'refreshTokenExpiresAt' => $newRefreshToken->claims()->get('exp'),
+                'User information' => $account->getUserIdentifier(),
 
 
             ], $formats),

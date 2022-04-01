@@ -2,13 +2,16 @@
 
 namespace App\Controller;
 
-use Symfony\Component\Uid\Uuid;
 use App\Repository\AccountRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV1;
+use Symfony\Component\Uid\UuidV4;
+use Symfony\Component\Uid\UuidV6;
 
 class ApiDefaultController extends AbstractController
 {
@@ -20,7 +23,7 @@ class ApiDefaultController extends AbstractController
         dd($users);
         if ('application/xml' === $request->headers->get('Accept')) {
 
-            $formats = 'xlm';
+            $formats = 'xml';
             $contentType = 'application/xml';
 
         } else {
@@ -29,6 +32,8 @@ class ApiDefaultController extends AbstractController
             $contentType = 'application/json';
 
         }
+
+        $test = $accountRepository->findAll(); //1ecb0d7a-e935-6bfa-b76e-79b381801e5d
 
         return  new  Response(
             $serializer->serialize(['message' => 'Test', 'UID-v1' => Uuid::v1(), 'UIDv1' => UuidV1::v1(), 'UID-v4' => Uuid::v4(), 'UIDv4' => UuidV4::v4(), 'UID-v6' => Uuid::v6(), 'UIDv6' => UuidV6::v4(), $accountRepository->findAll()], $formats),
